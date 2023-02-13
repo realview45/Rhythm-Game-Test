@@ -1,4 +1,4 @@
-package dynamic_beat_5;
+package dynamic_beat_7;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -12,6 +12,8 @@ import javax.swing.ImageIcon;//Ctrl+Shift+O
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
+import dynamic_beat_5.Main;
 
 public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 GUI(그래픽유저인터페이스)기반의 프로그램을 만들기 위한 가장 기본적으로 상속받아야함
 	// 내부에서 공유하는 바뀌지않는(상수) 상수는 전부 대문자 사용
@@ -34,6 +36,7 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 	private Image ArtistImage3 = new ImageIcon(Main.class.getResource("../images/JinSan.png")).getImage();
 	private Image ArtistImage4 = new ImageIcon(Main.class.getResource("../images/JaeHoon.png")).getImage();
 	
+	private Image SelectedMusicImage = new ImageIcon(Main.class.getResource("../images/Bar.png")).getImage();
 	
 	// menuBar라는 객체안에 menuBar.png이미지가 들어감
 	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("../images/menuBar.png")));
@@ -46,11 +49,6 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 	private ImageIcon startButtonBasicImage = new ImageIcon(Main.class.getResource("../images/UpsideButton.png"));
 	private ImageIcon startButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/UpsideButtonHover.png"));
 	
-	//방향버튼
-	private ImageIcon leftButtonImage = new ImageIcon(Main.class.getResource("../images/leftButton.png"));
-	private ImageIcon rightButtonImage = new ImageIcon(Main.class.getResource("../images/rightButton.png"));
-	
-	
 	//끝내기버튼
 	private ImageIcon quitButtonBasicImage = new ImageIcon(Main.class.getResource("../images/UpsideButton.png"));
 	private ImageIcon quitButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/UpsideButtonHover.png"));
@@ -58,17 +56,23 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 	private JButton exitButton = new JButton(exitButtonBasicImage);
 	private JButton startButton = new JButton(startButtonBasicImage);
 	private JButton quitButton = new JButton(quitButtonBasicImage);
-	private JButton leftButton = new JButton(leftButtonImage);
-	private JButton rightButton = new JButton(rightButtonImage);
+	
+	private JButton A1Button = new JButton();
+	private JButton A2Button = new JButton();
+	private JButton A3Button = new JButton();
+	private JButton A4Button = new JButton();
+	
+	Music selectedMusic = new Music("KICKBACKshort.mp3",true);
+	
 	// private JButton exitButton = new JButton(new
 	// ImageIcon(Main.class.getResource("../images/ExitON.png")));
 
-	
 	private int mouseX, mouseY;
-	
 	//메인화면일떄 true
 	private boolean isMainScreen =false;
-
+	//1은 KICKBACK, 1은 MarioNette, 2는 Crow, 3은 Naruto 
+	private int whereMusic = 1;
+	
 	public DynamicBeat() {// 생성자(DynamicBeat라는 객체가 만들어졌을 떄 가장 먼저 실행되는 부분(초기화를 담당)
 		// deco(menuBar)를 보이지않게 만듬
 		setUndecorated(true);
@@ -82,6 +86,17 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 		setBackground(new Color(0, 0, 0, 0));
 		// Button이나 JLabel등을 넣었을때 그 위치그대로 꽂힘
 		setLayout(null);
+		//00코드옮김
+		// introMusic을 무한재생하는 클래스객체생성 main으로넘어갈때 음악이 멈추도록
+		Music introMusic = new Music("introMusicMP3.mp3", true);
+		introMusic.start();
+		
+		A1Button.setVisible(false);
+		A2Button.setVisible(false);
+		A3Button.setVisible(false);
+		A4Button.setVisible(false);
+
+		
 		// menuBar의 절대위치와 크기를 정해줌
 		menuBar.setBounds(0, 0, 1200, 30);
 		menuBar.addMouseListener(new MouseAdapter() {
@@ -165,15 +180,25 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 				Music buttonPressedMusic = new Music("buttonPressedMusic.mp3",false);
 				buttonPressedMusic.start();
 				
+				introMusic.close();
+				//하이라이트 부분만 잘라서 사용
+				//selectedMusic = new Music("KICKBACKshort.mp3",true);
+				selectedMusic.start();
+				
+				
 				//게임시작 이벤트
 				startButton.setVisible(false);
 				quitButton.setVisible(false);
-				leftButton.setVisible(true);//이전에 초기화
-				rightButton.setVisible(true);
+				A1Button.setVisible(true);				
+				A2Button.setVisible(true);
+				A3Button.setVisible(true);
+				A4Button.setVisible(true);
+
+				isMainScreen = true;
 				background = new ImageIcon(Main.class.getResource("../images/mainbBackground.png"))
 						.getImage();
-				//메인화면
-				isMainScreen= true;
+
+				
 				
 			}
 		});
@@ -210,69 +235,138 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 				System.exit(0);
 			}
 		});
-		leftButton.setVisible(false);
-		leftButton.setBounds(140, 310, 60, 60);
-		leftButton.setBorderPainted(false);
-		leftButton.setContentAreaFilled(false);
-		leftButton.setFocusPainted(false);
-		leftButton.addMouseListener(new MouseAdapter() {
+		A1Button.setBounds( 290, 150, 60, 60);
+		A1Button.setBorderPainted(false);
+		A1Button.setContentAreaFilled(false);
+		A1Button.setFocusPainted(false);
+		//size는 히트박스
+		A1Button.setSize(700, 100);
+		A1Button.addMouseListener(new MouseAdapter() {
 			//마우스가 올라갔을 때 Entered로 버튼이미지 바뀌고 손가락모양으로바뀌고 소리남
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				leftButton.setIcon(leftButtonImage);
-				leftButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				A1Button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 				Music buttonEnteredMusic = new Music("buttonEnteredMusic.mp3",false);
 				buttonEnteredMusic.start();
 			}
 			//마우스가 떼졌을때 Basic으로 다시 바꿔줌 다시 원래커서모양으로 돌아오고 소리남
 			@Override
 			public void mouseExited(MouseEvent e) {
-				leftButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				A1Button.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
 			//눌렀을때 꺼짐
 			@Override
 			public void mousePressed(MouseEvent e) {
 				Music buttonPressedMusic = new Music("buttonPressedMusic.mp3",false);
 				buttonPressedMusic.start();
-				//오른쪽버튼 이벤트
+				whereMusic=1;
+				selectedMusic.close();
+				selectedMusic = new Music("KICKBACKshort.mp3",true);
+				selectedMusic.start();
 			}
+			
 		});
-		rightButton.setVisible(false);
-		rightButton.setBounds(1080, 310, 60, 60);
-		rightButton.setBorderPainted(false);
-		rightButton.setContentAreaFilled(false);
-		rightButton.setFocusPainted(false);
-		rightButton.addMouseListener(new MouseAdapter() {
+		A2Button.setBounds( 290, 250+10, 60, 60);
+		A2Button.setBorderPainted(false);
+		A2Button.setContentAreaFilled(false);
+		A2Button.setFocusPainted(false);
+		//size는 히트박스
+		A2Button.setSize(700, 100);
+		A2Button.addMouseListener(new MouseAdapter() {
 			//마우스가 올라갔을 때 Entered로 버튼이미지 바뀌고 손가락모양으로바뀌고 소리남
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				rightButton.setIcon(rightButtonImage);
-				rightButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				A2Button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 				Music buttonEnteredMusic = new Music("buttonEnteredMusic.mp3",false);
 				buttonEnteredMusic.start();
 			}
 			//마우스가 떼졌을때 Basic으로 다시 바꿔줌 다시 원래커서모양으로 돌아오고 소리남
 			@Override
 			public void mouseExited(MouseEvent e) {
-				rightButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				A2Button.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
 			//눌렀을때 꺼짐
 			@Override
 			public void mousePressed(MouseEvent e) {
 				Music buttonPressedMusic = new Music("buttonPressedMusic.mp3",false);
 				buttonPressedMusic.start();
-				//오른쪽버튼 이벤트
+				whereMusic=2;
+				selectedMusic.close();
+				selectedMusic = new Music("MARIONETTEshort.mp3",true);
+				selectedMusic.start();
 			}
+			
 		});
-		//add가 된 부분들은 paintComponents에 의해서 그려짐
+		A3Button.setBounds(290, 350+20, 60, 60);
+		A3Button.setBorderPainted(false);
+		A3Button.setContentAreaFilled(false);
+		A3Button.setFocusPainted(false);
+		//size는 히트박스
+		A3Button.setSize(700, 100);
+		A3Button.addMouseListener(new MouseAdapter() {
+			//마우스가 올라갔을 때 Entered로 버튼이미지 바뀌고 손가락모양으로바뀌고 소리남
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				A3Button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				Music buttonEnteredMusic = new Music("buttonEnteredMusic.mp3",false);
+				buttonEnteredMusic.start();
+			}
+			//마우스가 떼졌을때 Basic으로 다시 바꿔줌 다시 원래커서모양으로 돌아오고 소리남
+			@Override
+			public void mouseExited(MouseEvent e) {
+				A3Button.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+			//눌렀을때 꺼짐
+			@Override
+			public void mousePressed(MouseEvent e) {
+				Music buttonPressedMusic = new Music("buttonPressedMusic.mp3",false);
+				buttonPressedMusic.start();
+				whereMusic=3;
+				selectedMusic.close();
+				selectedMusic = new Music("CROWshort.mp3",true);
+				selectedMusic.start();
+			}
+			
+		});
+		A4Button.setBounds( 290, 450+30, 60, 60);
+		A4Button.setBorderPainted(false);
+		A4Button.setContentAreaFilled(false);
+		A4Button.setFocusPainted(false);
+		//size는 히트박스
+		A4Button.setSize(700, 100);
+		A4Button.addMouseListener(new MouseAdapter() {
+			//마우스가 올라갔을 때 Entered로 버튼이미지 바뀌고 손가락모양으로바뀌고 소리남
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				A4Button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				Music buttonEnteredMusic = new Music("buttonEnteredMusic.mp3",false);
+				buttonEnteredMusic.start();
+			}
+			//마우스가 떼졌을때 Basic으로 다시 바꿔줌 다시 원래커서모양으로 돌아오고 소리남
+			@Override
+			public void mouseExited(MouseEvent e) {
+				A4Button.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+			//눌렀을때 꺼짐
+			@Override
+			public void mousePressed(MouseEvent e) {
+				Music buttonPressedMusic = new Music("buttonPressedMusic.mp3",false);
+				buttonPressedMusic.start();
+				whereMusic=4;
+				selectedMusic.close();
+				selectedMusic = new Music("NARUTOshort.mp3",true);
+				selectedMusic.start();
+			}
+			
+		});
+		add(A1Button);
+		add(A2Button);
+		add(A3Button);
+		add(A4Button);
 		add(exitButton);
 		add(startButton);
 		add(quitButton);
-		add(leftButton);
-		add(rightButton);
-		// introMusic을 무한재생하는 클래스객체생성
-		Music introMusic = new Music("introMusicMP3.mp3", true);
-		introMusic.start();
+
 	}
 
 	// 메서드(함수) 생성
@@ -291,6 +385,18 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 		// paintComponents는 menuBar(JLabel등)를 screenImage(JFrame)라는 변수 안에 그려주는역할
 		// ㅗ고정된이미지!
 		if(isMainScreen) {
+			if(whereMusic==1) {
+				g.drawImage(SelectedMusicImage,290,150,null);	
+			}
+			else if(whereMusic==2) {
+				g.drawImage(SelectedMusicImage,290,250+10,null);
+			}
+			else if(whereMusic==3) {
+				g.drawImage(SelectedMusicImage,290,350+20,null);
+			}
+			else {
+				g.drawImage(SelectedMusicImage,290,450+30,null);
+			}
 			g.drawImage(ArtistImage1,  300, 150, null);
 			g.drawImage(ArtistImage2,  300, 250+10, null);
 			g.drawImage(ArtistImage3,  300, 350+20, null);
@@ -300,6 +406,18 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 			g.drawImage(titleImage3, 375, 350+20-3, null);
 			g.drawImage(titleImage4, 375, 450+30-3, null);
 		}
+		/*
+		if(isMainScreen) {
+			g.drawImage(ArtistImage1,  300, 150, null);
+			g.drawImage(ArtistImage2,  300, 250+10, null);
+			g.drawImage(ArtistImage3,  300, 350+20, null);
+			g.drawImage(ArtistImage4,  300, 450+30, null);
+			g.drawImage(titleImage1, 375, 150-3, null);
+			g.drawImage(titleImage2, 375, 250+10-3, null);
+			g.drawImage(titleImage3, 375, 350+20-3, null);
+			g.drawImage(titleImage4, 375, 450+30-3, null);
+		}
+		*/
 		paintComponents(g);
 		this.repaint();// 다시 paint()함수를 불러옴 즉 전체이미지를 프로그램이 종료될때까지 계속 반복해서 불러옴
 	}

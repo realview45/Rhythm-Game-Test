@@ -1,4 +1,4 @@
-package dynamic_beat_4;
+package dynamic_beat_5;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -21,14 +21,26 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 	private Graphics screenGraphic;
 
 	// 전역변수로 변경쓰
-	private Image introBackground = new ImageIcon(Main.class.getResource("../images/introBackground(Title).jpg"))
+	private Image background = new ImageIcon(Main.class.getResource("../images/introbackground(Title).jpg"))
 			.getImage();
 	// menuBar라는 객체안에 menuBar.png이미지가 들어감
 	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("../images/menuBar.png")));
 
-	private ImageIcon exitButtonBasicImage = new ImageIcon(Main.class.getResource("../images/ExitNotHover(Basic).png"));
-	private ImageIcon exitButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/ExitHover(Entered).png"));
+	//창닫기버튼
+	private ImageIcon exitButtonBasicImage = new ImageIcon(Main.class.getResource("../images/Exit.png"));
+	private ImageIcon exitButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/ExitHover.png"));
+	
+	//시작버튼
+	private ImageIcon startButtonBasicImage = new ImageIcon(Main.class.getResource("../images/UpsideButton.png"));
+	private ImageIcon startButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/UpsideButtonHover.png"));
+	
+	//끝내기버튼
+	private ImageIcon quitButtonBasicImage = new ImageIcon(Main.class.getResource("../images/UpsideButton.png"));
+	private ImageIcon quitButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/UpsideButtonHover.png"));
+	
 	private JButton exitButton = new JButton(exitButtonBasicImage);
+	private JButton startButton = new JButton(startButtonBasicImage);
+	private JButton quitButton = new JButton(quitButtonBasicImage);
 	// private JButton exitButton = new JButton(new
 	// ImageIcon(Main.class.getResource("../images/ExitON.png")));
 
@@ -70,7 +82,7 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 		// screenImage(JFrame)에 menuBar(JLabel)추가
 		add(menuBar);
 		// 가로 세로 가로크기 세로크기
-		exitButton.setBounds(1050, 50, 30, 30);
+		exitButton.setBounds(1050, 50, 513, 510);
 		exitButton.setBorderPainted(false);
 		exitButton.setContentAreaFilled(false);
 		exitButton.setFocusPainted(false);
@@ -86,11 +98,82 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 				buttonEnteredMusic.start();
 			}
 			//마우스가 떼졌을때 Basic으로 다시 바꿔줌 다시 원래커서모양으로 돌아오고 소리남
+			@Override
+			public void mouseExited(MouseEvent e) {
+				exitButton.setIcon(exitButtonBasicImage);;
+				exitButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
 			//눌렀을때 꺼짐
 			@Override
 			public void mousePressed(MouseEvent e) {
-				exitButton.setIcon(exitButtonBasicImage);
-				exitButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				Music buttonPressedMusic = new Music("buttonPressedMusic.mp3",false);
+				buttonPressedMusic.start();
+				try {
+					//누른다음 1초정도 있다가 프로그램이 종료되도록함(소리, 이미지 정상출력위해)
+					Thread.sleep(800);
+				} catch (InterruptedException ex) {
+					ex.printStackTrace();
+				}
+				System.exit(0);
+			}
+		});
+		startButton.setBounds(40, 200, 173, 36);
+		startButton.setBorderPainted(false);
+		startButton.setContentAreaFilled(false);
+		startButton.setFocusPainted(false);
+		startButton.addMouseListener(new MouseAdapter() {
+			//마우스가 올라갔을 때 Entered로 버튼이미지 바뀌고 손가락모양으로바뀌고 소리남
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				startButton.setIcon(startButtonEnteredImage);
+				startButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				Music buttonEnteredMusic = new Music("buttonEnteredMusic.mp3",false);
+				buttonEnteredMusic.start();
+			}
+			//마우스가 떼졌을때 Basic으로 다시 바꿔줌 다시 원래커서모양으로 돌아오고 소리남
+			@Override
+			public void mouseExited(MouseEvent e) {
+				startButton.setIcon(startButtonBasicImage);;
+				startButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+			//눌렀을때 꺼짐
+			@Override
+			public void mousePressed(MouseEvent e) {
+				Music buttonPressedMusic = new Music("buttonPressedMusic.mp3",false);
+				buttonPressedMusic.start();
+				
+				//게임시작 이벤트
+				startButton.setVisible(false);
+				quitButton.setVisible(false);
+				background = new ImageIcon(Main.class.getResource("../images/mainBackground.jpg"))
+						.getImage();
+				
+				
+				
+			}
+		});
+		quitButton.setBounds(40, 330, 173, 36);
+		quitButton.setBorderPainted(false);
+		quitButton.setContentAreaFilled(false);
+		quitButton.setFocusPainted(false);
+		quitButton.addMouseListener(new MouseAdapter() {
+			//마우스가 올라갔을 때 Entered로 버튼이미지 바뀌고 손가락모양으로바뀌고 소리남
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				quitButton.setIcon(quitButtonEnteredImage);
+				quitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				Music buttonEnteredMusic = new Music("buttonEnteredMusic.mp3",false);
+				buttonEnteredMusic.start();
+			}
+			//마우스가 떼졌을때 Basic으로 다시 바꿔줌 다시 원래커서모양으로 돌아오고 소리남
+			@Override
+			public void mouseExited(MouseEvent e) {
+				quitButton.setIcon(quitButtonBasicImage);;
+				quitButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+			//눌렀을때 꺼짐
+			@Override
+			public void mousePressed(MouseEvent e) {
 				Music buttonPressedMusic = new Music("buttonPressedMusic.mp3",false);
 				buttonPressedMusic.start();
 				try {
@@ -104,7 +187,8 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 		});
 		
 		add(exitButton);
-
+		add(startButton);
+		add(quitButton);
 		// introMusic을 무한재생하는 클래스객체생성
 		Music introMusic = new Music("introMusicMP3.mp3", true);
 		introMusic.start();
@@ -122,7 +206,7 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 
 	public void screenDraw(Graphics g) {// 백그라운드이미지를 스크린에 그리기
 		// screenImage라는 변수 안에 일시적으로 그려줌
-		g.drawImage(introBackground, 0, 0, null);
+		g.drawImage(background, 0, 0, null);
 		// paintComponents는 menuBar(JLabel등)를 screenImage(JFrame)라는 변수 안에 그려주는역할
 		// ㅗ고정된이미지!
 		paintComponents(g);

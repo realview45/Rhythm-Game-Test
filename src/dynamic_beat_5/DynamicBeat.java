@@ -24,10 +24,15 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 	private Image background = new ImageIcon(Main.class.getResource("../images/introbackground(Title).jpg"))
 			.getImage();
 	
-	private Image titleImage = new ImageIcon(Main.class.getResource("../images/KickBack.png")).getImage();
+	private Image titleImage1 = new ImageIcon(Main.class.getResource("../images/KickBack.png")).getImage();
+	private Image titleImage2 = new ImageIcon(Main.class.getResource("../images/Marionette.png")).getImage();
+	private Image titleImage3 = new ImageIcon(Main.class.getResource("../images/Crow.png")).getImage();
+	private Image titleImage4 = new ImageIcon(Main.class.getResource("../images/Naruto.png")).getImage();
 	// 아티스트 초상화 getImage는 ImageIcon을 Image로 변화해준다
-	private Image selectedImage = new ImageIcon(Main.class.getResource("../images/01JinSan.jpg")).getImage();
-	
+	private Image ArtistImage1 = new ImageIcon(Main.class.getResource("../images/SungHa.png")).getImage();
+	private Image ArtistImage2 = new ImageIcon(Main.class.getResource("../images/HwaJong.png")).getImage();
+	private Image ArtistImage3 = new ImageIcon(Main.class.getResource("../images/JinSan.png")).getImage();
+	private Image ArtistImage4 = new ImageIcon(Main.class.getResource("../images/JaeHoon.png")).getImage();
 	
 	
 	// menuBar라는 객체안에 menuBar.png이미지가 들어감
@@ -286,8 +291,14 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 		// paintComponents는 menuBar(JLabel등)를 screenImage(JFrame)라는 변수 안에 그려주는역할
 		// ㅗ고정된이미지!
 		if(isMainScreen) {
-			g.drawImage(selectedImage,  340, 100, null);
-			g.drawImage(titleImage, 340, 70, null);
+			g.drawImage(ArtistImage1,  300, 150, null);
+			g.drawImage(ArtistImage2,  300, 250+10, null);
+			g.drawImage(ArtistImage3,  300, 350+20, null);
+			g.drawImage(ArtistImage4,  300, 450+30, null);
+			g.drawImage(titleImage1, 375, 150-3, null);
+			g.drawImage(titleImage2, 375, 250+10-3, null);
+			g.drawImage(titleImage3, 375, 350+20-3, null);
+			g.drawImage(titleImage4, 375, 450+30-3, null);
 		}
 		paintComponents(g);
 		this.repaint();// 다시 paint()함수를 불러옴 즉 전체이미지를 프로그램이 종료될때까지 계속 반복해서 불러옴

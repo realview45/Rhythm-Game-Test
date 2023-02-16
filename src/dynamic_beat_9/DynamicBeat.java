@@ -1,4 +1,4 @@
-package dynamic_beat_7;
+package dynamic_beat_9;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -7,6 +7,7 @@ import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;//Ctrl+Shift+O
 import javax.swing.JButton;
@@ -14,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import dynamic_beat_5.Main;
+import dynamic_beat_9.Track;
 
 public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 GUI(그래픽유저인터페이스)기반의 프로그램을 만들기 위한 가장 기본적으로 상속받아야함
 	// 내부에서 공유하는 바뀌지않는(상수) 상수는 전부 대문자 사용
@@ -82,7 +84,7 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 	private boolean isMainScreen =false;
 	//1은 KICKBACK, 1은 MarioNette, 2는 Crow, 3은 Naruto 
 	private int whereMusic = 1;
-	
+	ArrayList<Track> trackList = new ArrayList<Track>();
 	public DynamicBeat() {// 생성자(DynamicBeat라는 객체가 만들어졌을 떄 가장 먼저 실행되는 부분(초기화를 담당)
 		// deco(menuBar)를 보이지않게 만듬
 		setUndecorated(true);
@@ -130,6 +132,12 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 
 		// screenImage(JFrame)에 menuBar(JLabel)추가
 		add(menuBar);
+			
+		trackList.add(new Track("Sungha.png", "KickBack.png","SungHaBG.png","KICKBACKshort.mp3","KICKBACK.mp3"));
+		trackList.add(new Track("HwaJong.png", "Marionette.png","HwaJongBG.png","MARIONETTEshort.mp3","MARIONETTE.mp3"));
+		trackList.add(new Track("JinSan.png", "Crow.png","JinSanBG.png","CROWshort.mp3","CROW.mp3"));
+		trackList.add(new Track("JaeHoon.png", "Naruto.png","JaeHoonBG.png","NARUTOshort.mp3","NARUTO.mp3"));
+		
 		// 가로 세로 가로크기 세로크기
 		exitButton.setBounds(1050, 50, 513, 510);
 		exitButton.setBorderPainted(false);
@@ -410,7 +418,7 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 				Music buttonPressedMusic = new Music("buttonPressedMusic.mp3",false);
 				buttonPressedMusic.start();
 				//난이도쉬움이벤트
-	
+				gameStart(whereMusic,"easy");
 			}
 		});
 		hardButton.setBounds(725,616, 250,67);
@@ -440,7 +448,7 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 				Music buttonPressedMusic = new Music("buttonPressedMusic.mp3",false);
 				buttonPressedMusic.start();
 				//난이도어려움이벤드
-
+				gameStart(whereMusic,"hard");
 			}
 		});
 		add(exitButton);
@@ -506,7 +514,7 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 		A4Button.setVisible(false);		
 		easyButton.setVisible(false);
 		hardButton.setVisible(false);
-		background = new ImageIcon(Main.class.getResource("../images/mainbBackground.png"))
+		background = new ImageIcon(Main.class.getResource("../images/"+trackList.get(whereMusic-1).getGameImage()))
 				.getImage();
 	}
 }

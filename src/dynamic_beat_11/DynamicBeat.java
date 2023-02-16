@@ -1,4 +1,4 @@
-package dynamic_beat_10;
+package dynamic_beat_11;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -16,8 +16,6 @@ import javax.swing.ImageIcon;//Ctrl+Shift+O
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-
-import dynamic_beat_11.KeyListener;
 
 public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 GUI(그래픽유저인터페이스)기반의 프로그램을 만들기 위한 가장 기본적으로 상속받아야함
 	// 내부에서 공유하는 바뀌지않는(상수) 상수는 전부 대문자 사용
@@ -40,13 +38,7 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 	private Image ArtistImage3 = new ImageIcon(Main.class.getResource("../images/JinSan.png")).getImage();
 	private Image ArtistImage4 = new ImageIcon(Main.class.getResource("../images/JaeHoon.png")).getImage();
 	
-	private Image gameInfoImage = new ImageIcon(Main.class.getResource("../images/gameinfo.png")).getImage();
-	private Image judgementLineImage = new ImageIcon(Main.class.getResource("../images/judgementBar.png")).getImage();
-	private Image noteRouteImage = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
-	private Image noteRouteLineImage = new ImageIcon(Main.class.getResource("../images/noteRouteLine.png")).getImage();
-	private Image noteBasicImage = new ImageIcon(Main.class.getResource("../images/Note01.png")).getImage();
-	
-	
+
 	private Image SelectedMusicImage = new ImageIcon(Main.class.getResource("../images/Bar.png")).getImage();
 	
 	// menuBar라는 객체안에 menuBar.png이미지가 들어감
@@ -96,6 +88,12 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 	//1은 KICKBACK, 1은 MarioNette, 2는 Crow, 3은 Naruto 
 	private int whereMusic = 1;
 	ArrayList<Track> trackList = new ArrayList<Track>();
+	
+	//전체에 한곡만재생 한개의 게임만할수 있기 때문에 전체를 아우르는 public static넣어줌
+	//프로젝트전체에 사용되는 하나의 변수가 됨
+	public static Game game =new Game();
+	//Game game = new Game();
+	
 	public DynamicBeat() {// 생성자(DynamicBeat라는 객체가 만들어졌을 떄 가장 먼저 실행되는 부분(초기화를 담당)
 		// deco(menuBar)를 보이지않게 만듬
 		setUndecorated(true);
@@ -109,7 +107,10 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 		setBackground(new Color(0, 0, 0, 0));
 		// Button이나 JLabel등을 넣었을때 그 위치그대로 꽂힘
 		setLayout(null);
+		
+		//만든클래스 적용시키기
 		addKeyListener(new KeyListener());
+		
 		//00코드옮김
 		// introMusic을 무한재생하는 클래스객체생성 main으로넘어갈때 음악이 멈추도록
 		Music introMusic = new Music("introMusicMP3.mp3", true);
@@ -544,42 +545,8 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 			g.drawImage(titleImage3, 375, 350+20-3, null);
 			g.drawImage(titleImage4, 375, 450+30-3, null);
 		}
-		if(isGameScreen) {
-			
-			for(int i=0;i<5;i++) {
-				g.drawImage(noteRouteLineImage, 15+104+104*i, 30, null);
-				g.drawImage(noteRouteImage, 123+104*i, 30, null);
-			}
-			for(int i=5;i<10;i++) {
-				g.drawImage(noteRouteImage, 119+104*i, 30, null);
-				g.drawImage(noteRouteLineImage, 219+104*i, 30, null);
-			}
-			g.drawImage(noteBasicImage, 123, 120, null);
-			g.drawImage(gameInfoImage, 0, 660, null);
-			g.drawImage(judgementLineImage, 0, 580, null);
-			g.setColor(Color.white);
-			//안티앨리어싱 적용되어 글자가 깨짐이 없이
-			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-			g.setFont(new Font("Arial", Font.ITALIC, 30));
-			g.drawString("KICKBACK arr by SunghaJung",40,691);
-			g.drawString("Easy", 1170, 691);
-			
-			g.setFont(new Font("Arial",Font.PLAIN,26));
-			g.setColor(Color.DARK_GRAY);
-			g.drawString("A",  166,  609);
-			g.drawString("S",  270,  609);
-			g.drawString("D",  374,  609);
-			g.drawString("F",  478,  609);
-			g.drawString("Space Bar",  580,  609);
-			g.drawString("J",  784,  609);
-			g.drawString("K",  889,  609);
-			g.drawString("L",  993,  609);
-			g.drawString(";",  1097,  609);
-
-			g.setFont(new Font("Elephant", Font.BOLD, 30));
-			//점수판
-			g.drawString("00000", 580, 691);
-
+		if(isGameScreen) {		
+			game.screenDraw(g);
 		}
 		paintComponents(g);
 		this.repaint();// 다시 paint()함수를 불러옴 즉 전체이미지를 프로그램이   종료될때까지 계속 반복해서 불러옴
@@ -598,6 +565,11 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 				.getImage();
 		backButton.setVisible(true);
 		isGameScreen = true;
+		//뷰의 포커스를 가질수있는지 결정
+		//setFocusable(true);
+		//키이벤트 강제설정
+		requestFocus();
+
 	}
 	public void backMain() {
 		isMainScreen =true;

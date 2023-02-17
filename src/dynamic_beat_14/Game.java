@@ -34,13 +34,16 @@ public class Game extends Thread{
 	//13
 	ArrayList<Note> noteList= new ArrayList<Note>();
 	
+	//14.5 노트수작업으로 안찍는법 gameMaker(게임제작모드)
+	private boolean gameMaker=false;
 	
 	public Game(String titleName, String difficulty, String musicTitle) {
 		this.titleName = titleName; 
 		this.difficulty=difficulty;
 		this.musicTitle=musicTitle;
 		gameMusic = new Music(this.musicTitle, false);
-		gameMusic.start();
+		//14.5-2
+		//gameMusic.start();
 		//13
 		//dropNotes(titleName);
 	}
@@ -131,39 +134,57 @@ public class Game extends Thread{
 	}
 	public void pressA() {
 		noteRouteAImage = new ImageIcon(Main.class.getResource("../images/noteRouteA.png")).getImage();
-
+		if (gameMaker==true) {
+			System.out.println(gameMusic.getTime() + "A");
+		}
 	}
 	public void pressS() {
 		noteRouteSImage =new ImageIcon(Main.class.getResource("../images/noteRouteS.png")).getImage();
-
+		if (gameMaker==true) {
+			System.out.println(gameMusic.getTime() + "S");
+		}
 	}
 	public void pressD() {
 		noteRouteDImage = new ImageIcon(Main.class.getResource("../images/noteRouteD.png")).getImage();
-
+		if (gameMaker==true) {
+			System.out.println(gameMusic.getTime() + "D");
+		}
 	}
 	public void pressF() {
 		noteRouteFImage =new ImageIcon(Main.class.getResource("../images/noteRouteF.png")).getImage();
-
+		if (gameMaker==true) {
+			System.out.println(gameMusic.getTime() + "F");
+		}
 	}
 	public void pressSB() {
 		noteRouteSBImage = new ImageIcon(Main.class.getResource("../images/noteRoute1.png")).getImage();
-
+		if (gameMaker==true) {
+			System.out.println(gameMusic.getTime() + "SB");
+		}
 	}
 	public void pressJ() {
 		noteRouteJImage = new ImageIcon(Main.class.getResource("../images/noteRouteJ.png")).getImage();
-
+		if (gameMaker==true) {
+			System.out.println(gameMusic.getTime() + "J");
+		}
 	}
 	public void pressK() {
 		noteRouteKImage = new ImageIcon(Main.class.getResource("../images/noteRouteK.png")).getImage();
-
+		if (gameMaker==true) {
+			System.out.println(gameMusic.getTime() + "K");
+		}
 	}
 	public void pressL() {
 		noteRouteLImage =new ImageIcon(Main.class.getResource("../images/noteRouteL.png")).getImage();
-
+		if (gameMaker==true) {
+			System.out.println(gameMusic.getTime() + "L");
+		}
 	}
 	public void presssem() {
 		noteRoutesemImage = new ImageIcon(Main.class.getResource("../images/noteRoutesem.png")).getImage();
-
+		if (gameMaker==true) {
+			System.out.println(gameMusic.getTime() + "sem");
+		}
 	}
 	public void releaseA() {
 		noteRouteAImage = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
@@ -212,20 +233,74 @@ public class Game extends Thread{
 	}
 	//13 14
 	public void dropNotes() {
+		//14.5-2
+		
+		Beat[] beats = null;
+		if(titleName.equals("KICKBACK arr by Sungha Jung")) {
+			//노트도달시간에 구애받지 않고 항상 첫번째 노트가 판정바에 적중하는 타이밍 유지가능
+			int startTime = 4460 - Main.REACH_TIME * 1000;
+			int gap =400;
+			beats = new Beat[] {
+					new Beat(startTime, "SB"),
+					new Beat(startTime+gap, "S"),
+					new Beat(startTime+gap*2, "D"),
+					new Beat(startTime+gap*4, "D"),
+					new Beat(startTime+gap*6, "D"),
+					new Beat(startTime+gap*8, "D"),
+					new Beat(startTime+gap*10, "D"),
+					new Beat(startTime+gap*12, "D")
+			};
+		}
+		else if(titleName.equals("Dance of Marionette by HwaJong Kim")) {
+			int startTime=1000;
+			beats = new Beat[] {
+					new Beat(startTime, "SB"),
+			};
+		}
+		else if(titleName.equals("Crow by JinSan Kim")) {
+			int startTime=1000;
+			beats = new Beat[] {
+					new Beat(startTime, "SB"),
+			};
+		}
+		else if(titleName.equals("Rising Spirit arr by JaeHoon Jang")) {
+			int startTime=1000;
+			beats = new Beat[] {
+					new Beat(startTime, "SB"),
+			};
+		}
+		
+		/*
 		Beat[] beats= {
 				new Beat(1000,"A"),//1초후 A떨어지게
 				new Beat(2000,"S"),//2초후 B떨어지게
 				new Beat(3000,"D"),
 				new Beat(4000,"F"),
 		};
+		
+		*/
 		int i=0;
+		//14.5-2 배열이 초기화되는 시간에서오는 시간격차를 줄일수있다
+		gameMusic.start();
+		
+		//14.5-2 속도를 안정적으로 맞추기위해 
+		//while(beats[i].getTime()<=gameMusic.getTime()) {
 		while(true) {
+			boolean dropped =false;
 			//beat가 떨어지는시간대가 음악시간보다작다면
 			if(beats[i].getTime()<=gameMusic.getTime()) {
 				Note note = new Note(beats[i].getNoteName());
 				note.start();//떨어지는 쓰레드 시작 곡이재생되는 시점 실시간 파악해서 노트떨어뜨림
 				noteList.add(note);
 				i++;
+				dropped=true;
+			}
+			if(!dropped) {//노트가 떨어지지않은경우는 조금 쉬고 노트를 떨어뜨림
+				try {
+					Thread.sleep(5);
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		//13 

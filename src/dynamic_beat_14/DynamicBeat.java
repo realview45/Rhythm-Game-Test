@@ -97,6 +97,15 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 	//Game game = new Game();
 	
 	public DynamicBeat() {// 생성자(DynamicBeat라는 객체가 만들어졌을 떄 가장 먼저 실행되는 부분(초기화를 담당)
+		
+		//14.5-2 로딩이길어지면 오류가 발생할수있으므로 add가 이뤄지지않은상태에서 코드가 실행되면 오류가 남
+		trackList.add(new Track("Sungha.png", "KickBack.png","SungHaBG.png","KICKBACKshort.mp3","KICKBACK.mp3","KICKBACK arr by Sungha Jung"));
+		trackList.add(new Track("HwaJong.png", "Marionette.png","HwaJongBG.png","MARIONETTEshort.mp3","MARIONETTE.mp3","Dance of Marionette by HwaJong Kim"));
+		trackList.add(new Track("JinSan.png", "Crow.png","JinSanBG.png","CROWshort.mp3","CROW.mp3","Crow by JinSan Kim"));
+		trackList.add(new Track("JaeHoon.png", "Naruto.png","JaeHoonBG.png","NARUTOshort.mp3","NARUTO.mp3", "Rising Spirit arr by JaeHoon Jang"));
+		
+		
+		
 		// deco(menuBar)를 보이지않게 만듬
 		setUndecorated(true);
 		setTitle("Dynamic Beat");// 우리가 만들 게임의 이름
@@ -148,11 +157,7 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 		// screenImage(JFrame)에 menuBar(JLabel)추가
 		add(menuBar);
 			
-		trackList.add(new Track("Sungha.png", "KickBack.png","SungHaBG.png","KICKBACKshort.mp3","KICKBACK.mp3","KICKBACK arr by Sungha Jung"));
-		trackList.add(new Track("HwaJong.png", "Marionette.png","HwaJongBG.png","MARIONETTEshort.mp3","MARIONETTE.mp3","Dance of Marionette by HwaJong Kim"));
-		trackList.add(new Track("JinSan.png", "Crow.png","JinSanBG.png","CROWshort.mp3","CROW.mp3","Crow by JinSan Kim"));
-		trackList.add(new Track("JaeHoon.png", "Naruto.png","JaeHoonBG.png","NARUTOshort.mp3","NARUTO.mp3", "Rising Spirit arr by JaeHoon Jang"));
-		
+
 		// 가로 세로 가로크기 세로크기
 		exitButton.setBounds(1209, 40, 513, 510);
 		exitButton.setBorderPainted(false);
@@ -217,8 +222,7 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 				introMusic.close();
 				//하이라이트 부분만 잘라서 사용
 				//selectedMusic = new Music("KICKBACKshort.mp3",true);
-				
-				
+							
 				//게임시작 이벤트
 				startButton.setVisible(false);
 				quitButton.setVisible(false);
@@ -229,10 +233,7 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 
 				isMainScreen = true;
 				background = new ImageIcon(Main.class.getResource("../images/mainbBackground.png"))
-						.getImage();
-
-				
-				
+						.getImage();	
 			}
 		});
 		quitButton.setBounds(40, 330, 173, 36);
@@ -550,6 +551,11 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 			game.screenDraw(g);
 		}
 		paintComponents(g);
+		try {//시간차(텀)을 두면서 실행 프로그램이 가벼워짐
+			Thread.sleep(5);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 		this.repaint();// 다시 paint()함수를 불러옴 즉 전체이미지를 프로그램이   종료될때까지 계속 반복해서 불러옴
 	}
 	public void gameStart(int nowSelected, String difficulty) {
@@ -566,15 +572,18 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 				.getImage();
 		backButton.setVisible(true);
 		isGameScreen = true;
+
+		//12
+		game = new Game(trackList.get(whereMusic-1).getTitleName(),difficulty,trackList.get(whereMusic-1).getStartMusic());
+		//14 해당인스턴스의 run함수가 자동실행됨
+		game.start();
+		
+		//14.5-2 맨밑에둬야 오류가 없음
 		//뷰의 키입력포커스를 가질수있는지 결정
 		setFocusable(true); 
 		//키이벤트 강제설정 
 		//requestFocus();
 		
-		//12
-		game = new Game(trackList.get(whereMusic-1).getTitleName(),difficulty,trackList.get(whereMusic-1).getGameMusic());
-		//14 해당인스턴스의 run함수가 자동실행됨
-		game.start();
 	}
 	public void backMain() {
 		isMainScreen =true;

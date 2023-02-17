@@ -283,9 +283,8 @@ public class Game extends Thread{
 		//14.5-2 배열이 초기화되는 시간에서오는 시간격차를 줄일수있다
 		gameMusic.start();
 		
-		//14.5-2 속도를 안정적으로 맞추기위해 
-		//while(beats[i].getTime()<=gameMusic.getTime()) {
-		while(true) {
+		//14.5-2 
+		while(i<beats.length && !isInterrupted()) {
 			boolean dropped =false;
 			//beat가 떨어지는시간대가 음악시간보다작다면
 			if(beats[i].getTime()<=gameMusic.getTime()) {

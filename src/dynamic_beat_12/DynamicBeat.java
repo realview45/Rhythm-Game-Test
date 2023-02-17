@@ -1,4 +1,4 @@
-package dynamic_beat_11;
+package dynamic_beat_12;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -76,7 +76,7 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 	private JButton easyButton = new JButton(easyButtonBasicImage);
 	private JButton hardButton = new JButton(hardButtonBasicImage);
 	
-	Music selectedMusic = new Music("KICKBACKshort.mp3",true);
+	Music selectedMusic = new Music("CROWshort.mp3", true);;
 	
 	// private JButton exitButton = new JButton(new
 	// ImageIcon(Main.class.getResource("../images/ExitON.png")));
@@ -86,12 +86,14 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 	private boolean isMainScreen =false;
 	private boolean isGameScreen =false;
 	//1은 KICKBACK, 1은 MarioNette, 2는 Crow, 3은 Naruto 
-	private int whereMusic = 1;
+	private int whereMusic = 0;
 	ArrayList<Track> trackList = new ArrayList<Track>();
 	
 	//전체에 한곡만재생 한개의 게임만할수 있기 때문에 전체를 아우르는 public static넣어줌
-	//프로젝트전체에 사용되는 하나의 변수가 됨
-	public static Game game =new Game();
+	//프로젝트전체에 사용되는 하나의 변수가 됨    
+	//public static Game game =new Game();
+	//12 변수를 선언만 함 나중에 객체생성
+	public static Game game;
 	//Game game = new Game();
 	
 	public DynamicBeat() {// 생성자(DynamicBeat라는 객체가 만들어졌을 떄 가장 먼저 실행되는 부분(초기화를 담당)
@@ -146,10 +148,10 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 		// screenImage(JFrame)에 menuBar(JLabel)추가
 		add(menuBar);
 			
-		trackList.add(new Track("Sungha.png", "KickBack.png","SungHaBG.png","KICKBACKshort.mp3","KICKBACK.mp3"));
-		trackList.add(new Track("HwaJong.png", "Marionette.png","HwaJongBG.png","MARIONETTEshort.mp3","MARIONETTE.mp3"));
-		trackList.add(new Track("JinSan.png", "Crow.png","JinSanBG.png","CROWshort.mp3","CROW.mp3"));
-		trackList.add(new Track("JaeHoon.png", "Naruto.png","JaeHoonBG.png","NARUTOshort.mp3","NARUTO.mp3"));
+		trackList.add(new Track("Sungha.png", "KickBack.png","SungHaBG.png","KICKBACKshort.mp3","KICKBACK.mp3","KICKBACK arr by Sungha Jung"));
+		trackList.add(new Track("HwaJong.png", "Marionette.png","HwaJongBG.png","MARIONETTEshort.mp3","MARIONETTE.mp3","Dance of Marionette by HwaJong Kim"));
+		trackList.add(new Track("JinSan.png", "Crow.png","JinSanBG.png","CROWshort.mp3","CROW.mp3","Crow by JinSan Kim"));
+		trackList.add(new Track("JaeHoon.png", "Naruto.png","JaeHoonBG.png","NARUTOshort.mp3","NARUTO.mp3", "Rising Spirit arr by JaeHoon Jang"));
 		
 		// 가로 세로 가로크기 세로크기
 		exitButton.setBounds(1209, 40, 513, 510);
@@ -215,7 +217,6 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 				introMusic.close();
 				//하이라이트 부분만 잘라서 사용
 				//selectedMusic = new Music("KICKBACKshort.mp3",true);
-				selectedMusic.start();
 				
 				
 				//게임시작 이벤트
@@ -431,7 +432,7 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 				Music buttonPressedMusic = new Music("buttonPressedMusic.mp3",false);
 				buttonPressedMusic.start();
 				//난이도쉬움이벤트
-				gameStart(whereMusic,"easy");
+				gameStart(whereMusic,"Easy");
 			}
 		});
 		hardButton.setBounds(725,616, 250,67);
@@ -461,7 +462,7 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 				Music buttonPressedMusic = new Music("buttonPressedMusic.mp3",false);
 				buttonPressedMusic.start();
 				//난이도어려움이벤드
-				gameStart(whereMusic,"hard");
+				gameStart(whereMusic,"Hard");
 			}
 		});
 
@@ -533,7 +534,7 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 			else if(whereMusic==3) {
 				g.drawImage(SelectedMusicImage,290,350+20,null);
 			}
-			else {
+			else if(whereMusic==4){
 				g.drawImage(SelectedMusicImage,290,450+30,null);
 			}
 			g.drawImage(ArtistImage1,  300, 150, null);
@@ -568,8 +569,11 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 		//뷰의 키입력포커스를 가질수있는지 결정
 		setFocusable(true); 
 		//키이벤트 강제설정 
-		requestFocus();
-
+		//requestFocus();
+		
+		//12
+		game = new Game(trackList.get(whereMusic-1).getTitleName(),difficulty,trackList.get(whereMusic-1).getGameMusic());
+		
 	}
 	public void backMain() {
 		isMainScreen =true;
@@ -582,5 +586,8 @@ public class DynamicBeat extends JFrame {// JFrame은 텍스트 기반이아닌 
 		background = new ImageIcon(Main.class.getResource("../images/mainbBackground.png")).getImage();
 		backButton.setVisible(false);
 		isGameScreen = false;
+		
+		//12
+		game.close();
 	}
 }

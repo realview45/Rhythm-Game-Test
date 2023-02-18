@@ -8,6 +8,8 @@ import javax.swing.ImageIcon;
 
 public class Note extends Thread{
 	private Image noteBasicImage = new ImageIcon(Main.class.getResource("../images/Note01.png")).getImage();
+	private Image noteLongImage = new ImageIcon(Main.class.getResource("../images/noteLong.png")).getImage();
+
 	//노트가 생성되고 1초뒤에 판정라인에 다다르게됨
 	//현재위치 120 1초에 700이동 1초가 지났을때 580이라는 판정라인에다다름
 	private int x,y=580-(1000/Main.SLEEP_TIME*Main.NOTE_SPEED) * Main.REACH_TIME;
@@ -54,8 +56,7 @@ public class Note extends Thread{
 		}
 		else //스페이스바
 		{
-			g.drawImage(noteBasicImage, x, y, null);
-			g.drawImage(noteBasicImage, x+100, y, null);
+			g.drawImage(noteLongImage, x, y, null);
 
 		}
 	}

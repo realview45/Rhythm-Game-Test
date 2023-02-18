@@ -7,7 +7,7 @@ public class Main {
 	public static final int NOTE_SPEED = 3;//0.007초
 	public static final int SLEEP_TIME =10;//0.01초
 	//14.5-2
-	public static final int REACH_TIME =2;//노트가 생성되고 나서 판정바에 도달하기까지의시간
+	public static final int REACH_TIME =2;//노트가 생성되고 나서 판정바에 도달하기까지의시간 2가적당 1이면 화면중간에서 노트생성됨
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
